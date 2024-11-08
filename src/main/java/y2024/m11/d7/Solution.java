@@ -1,4 +1,4 @@
-package y2024.m11.d6;
+package y2024.m11.d7;
 
 //给你一个长度为 n 的整数数组 nums 和一个正整数 k 。
 //
@@ -57,38 +57,33 @@ package y2024.m11.d6;
 // 提示： 
 //
 // 
-// 1 <= n == nums.length <= 500 
-// 1 <= nums[i] <= 10⁵ 
+// 1 <= n == nums.length <= 10⁵ 
+// 1 <= nums[i] <= 10⁶ 
 // 1 <= k <= n 
 // 
 //
-// Related Topics 数组 滑动窗口 👍 14 👎 0
+// Related Topics 数组 滑动窗口 👍 24 👎 0
 
+
+import java.util.Arrays;
 
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
     public static int[] resultsArray(int[] nums, int k) {
-        //结果最大长度=nums.length-k+1
-        int[] result = new int[nums.length - k + 1];
-        //遍历nums, 从每个下标开始找k个数判断是否满足条件
-        for (int i = 0; i < nums.length; i++) {
-            //当nums剩余个数不足以找到k个数时
-            if (i + k - 1 >= nums.length) {
-                break;
+        int n = nums.length;
+        int[] ans = new int[n - k + 1];
+        Arrays.fill(ans, -1);
+        int cnt = 0;
+        for (int i = 0; i < n; i++) {
+            //记录当前位置之前有多少个连续
+            cnt = i == 0 || nums[i] - nums[i - 1] != 1 ? 1 : cnt + 1;
+            //如果连续大于等于k
+            if (cnt >= k) {
+                //将当前位置值放到结果中
+                ans[i - k + 1] = nums[i];
             }
-            //判断连续k个数是否递增
-            boolean flag = true;
-            for (int j = 0; j < k; j++) {
-                //不递增结束
-                if (nums[i] != nums[i + j] - j) {
-                    flag = false;
-                    break;
-                }
-            }
-            //递增返回最大值, 不递增返回-1
-            result[i] = flag ? nums[i + k - 1] : -1;
         }
-        return result;
+        return ans;
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
